@@ -3,6 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const obj: any = {};
+  obj.name = "Alice";
+  obj.age = 25;
+  console.log(obj);
   return (
     <div className="App">
       <header className="App-header">
