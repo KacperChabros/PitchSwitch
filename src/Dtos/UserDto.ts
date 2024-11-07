@@ -18,6 +18,6 @@ export type RegisterUserDto = {
     password: string;
     firstName: string;
     lastName: string;
-    profilePictureUrl?: string | null;
     bio?: string | null;
+    profilePicture?: File | null;
 }

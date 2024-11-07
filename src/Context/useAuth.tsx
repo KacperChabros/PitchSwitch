@@ -11,7 +11,7 @@ type UserContextType = {
     accessToken: string | null;
     refreshToken: string | null;
     loginUser: (username: string, password: string) => Promise<void>
-    registerUser: (username: string, email: string, password: string, firstName: string, lastName: string, profilePictureUrl?: string | null, bio?: string | null) => Promise<void>
+    registerUser: (username: string, email: string, password: string, firstName: string, lastName: string, bio?: string | null, profilePicture?: File | null) => Promise<void>
     logoutUser: () => void;
     isLoggedIn: () => boolean;
 }
@@ -68,8 +68,8 @@ export const UserProvider = ({ children }: Props) => {
         );
     };
 
-    const registerUser = async (username: string, email: string, password: string, firstName: string, lastName: string, profilePictureUrl?: string | null, bio?: string | null) => {
-        await registerAPI(username, email, password, firstName, lastName, profilePictureUrl, bio)
+    const registerUser = async (username: string, email: string, password: string, firstName: string, lastName: string, bio?: string | null, profilePicture?: File | null) => {
+        await registerAPI(username, email, password, firstName, lastName, bio, profilePicture)
         .then((res) => {
             if(res){
                 const userDto: NewUserDto = res?.data;

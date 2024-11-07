@@ -24,8 +24,14 @@ const Navbar = ({onToggleSidebar}: Props) => {
                     <Link to="/home" className="text-white hover:underline">News</Link>
                 </div>
             {isLoggedIn() ? (
-                <div className="hidden md:flex space-x-4">
-                    <div className='text-white font-bold py-2 px-4'>Welcome, {user?.userName}</div>
+                <div className="hidden md:flex items-center space-x-6 justify-between">
+            
+                    <div className='text-white font-bold py-2 px-1'>Welcome, {user?.userName}</div>
+                    <img
+                        src={user?.profilePictureUrl && user.profilePictureUrl.trim().length > 0 ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${user.profilePictureUrl}` : "/images/default_user_picture.png"}
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full object-cover justify-center"
+                    />      
                     <a onClick={logoutUser} className="bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition duration-300">Logout</a>
                 </div>
             ) : (

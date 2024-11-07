@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from '../../Context/useAuth';
@@ -67,9 +67,26 @@ const RegisterPage = (props: Props) => {
   const navigate = useNavigate();
   const { registerUser } = useAuth();
   const {register, handleSubmit, formState: { errors }} = useForm<LoginFormInputs>({resolver: yupResolver(validation)})
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState<string | null>(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        if (file && !['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+            toast.error("Only JPEG, PNG, or GIF image files are allowed.");
+            return;
+        }
+
+        setProfilePicture(file);
+        if (file) {
+            setProfilePicturePreview(URL.createObjectURL(file));
+        } else {
+            setProfilePicturePreview(null);
+        }
+};
+
   const handleRegister = async (form: LoginFormInputs) => {
     try{
-        const result = await registerUser(form.userName, form.email, form.password, form.firstName, form.lastName, form.bio);
+        const result = await registerUser(form.userName, form.email, form.password, form.firstName, form.lastName, form.bio, profilePicture);
         toast.success("Registered successfully!");
         navigate("/home");
     }catch(e: any){
@@ -182,6 +199,24 @@ const RegisterPage = (props: Props) => {
                     />
                         {errors.bio ? <p className="text-red-500">{errors.bio.message}</p> : ""}
                     </div>
+                    <div className="flex flex-col items-center">
+                        <label htmlFor="profilePicture" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture:</label>
+                        <input
+                            type="file"
+                            id="profilePicture"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="border border-gray-300 rounded p-2 text-gray-900 dark:text-white"
+                        />
+                        {profilePicturePreview && (
+                            <img
+                                src={profilePicturePreview}
+                                alt="Profile Preview"
+                                className="w-32 h-32 mt-4 rounded-full object-cover"
+                            />
+                        )}
+                    </div>
+
                     <button
                         type="submit"
                         className="w-full text-white bg-green-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
