@@ -206,7 +206,7 @@ const RegisterPage = (props: Props) => {
                             id="profilePicture"
                             accept="image/*"
                             onChange={handleFileChange}
-                            className="border border-gray-300 rounded p-2 text-gray-900 dark:text-white"
+                            className="border border-gray-300 rounded p-2 text-gray-900 dark:text-white w-full mb-4"
                         />
                         {profilePicturePreview && (
                             <img

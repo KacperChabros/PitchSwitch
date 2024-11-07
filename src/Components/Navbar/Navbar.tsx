@@ -20,9 +20,11 @@ const Navbar = ({onToggleSidebar}: Props) => {
             <button onClick={onToggleSidebar} className="text-white text-2xl md:hidden">
                 <FaBars />
             </button>
+            {isLoggedIn() && (
                 <div className="hidden md:flex space-x-4 flex-grow flex justify-center">
                     <Link to="/home" className="text-white hover:underline">News</Link>
                 </div>
+            )}
             {isLoggedIn() ? (
                 <div className="hidden md:flex items-center space-x-6 justify-between">
             
