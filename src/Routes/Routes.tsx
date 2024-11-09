@@ -7,6 +7,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import ClubSearchPage from "../Pages/ClubSearchPage/ClubSearchPage";
+import ClubPage from "../Pages/ClubPage/ClubPage";
+import NotFoundPage from "../Pages/NotFoundPage/NotFoundPage";
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +20,8 @@ export const router = createBrowserRouter([
             {path: "register", element: <PublicRoute><RegisterPage/></PublicRoute>},
             {path: "home", element: <ProtectedRoute><HomePage/></ProtectedRoute>},
             {path: "clubsearch", element: <ProtectedRoute><ClubSearchPage/></ProtectedRoute>},
+            {path: "club/:clubId", element: <ProtectedRoute><ClubPage/></ProtectedRoute>},
+            {path: "*", element: <NotFoundPage />},
         ]
     }
 ])

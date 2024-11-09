@@ -1,9 +1,10 @@
 type Props = {
     config: Array<any>;
     data: Array<any>;
+    onRowClick: (id: string) => void;
   };
   
-  const Table = ({ config, data }: Props) => {
+  const Table = ({ config, data, onRowClick }: Props) => {
     const renderedRows = data.map((rowItem: any) => {
       const keyField = config.find((col: any) => col.keyField)?.keyField || 'id';
       
@@ -11,6 +12,7 @@ type Props = {
         <tr
           key={rowItem[keyField]}
           className="hover:bg-blue-50 transition-colors duration-200 ease-in-out"
+          onClick={() => onRowClick(rowItem.clubId)}
         >
           {config.map((val: any, index: number) => {
             return (

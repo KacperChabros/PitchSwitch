@@ -6,57 +6,74 @@ import { toast } from 'react-toastify';
 import Table from '../../Components/Table/Table';
 import { useAuth } from '../../Context/useAuth';
 import ErrorHandler from '../../Helpers/ErrorHandler';
+import { useNavigate } from 'react-router-dom';
 type Props = {}
 
-const fields = [
-    { 
-        name: 'name', 
-        label: 'Name', 
-        type: 'input' as const, 
-        placeholder: 'Enter name',
-    },
-    { 
-        name: 'shortname', 
-        label: 'Short name', 
-        type: 'input' as const, 
-        placeholder: 'Enter shortname' 
-    },
-    { 
-        name: 'league', 
-        label: 'League', 
-        type: 'input' as const, 
-        placeholder: 'Enter league' 
-    },
-    { 
-        name: 'country', 
-        label: 'Country', 
-        type: 'input' as const, 
-        placeholder: 'Enter country' 
-    },
-    {
-        name: 'sortBy',
-        label: 'Sort by',
-        type: 'select' as const,
-        placeholder: 'Choose field',
-        options: [
-            { label: 'Name', value: 'name' },
-            { label: 'Shortname', value: 'shortname' },
-            { label: 'League', value: 'league' },
-            { label: 'Country', value: 'country' },
-        ],
-    },
-    {
-        name: 'sortOrder',
-        label: '',
-        type: 'select' as const,
-        placeholder: 'Choose type',
-        options: [
-            { label: 'Ascending', value: 'asc' },
-            { label: 'Descending', value: 'desc' },
-        ],
-        defaultValue: 'desc'
-    },
-];
+const createFieldsConfig = (isAdmin: boolean) => {
+    const fields = [
+        { 
+            name: 'name', 
+            label: 'Name', 
+            type: 'input' as const, 
+            placeholder: 'Enter name',
+        },
+        { 
+            name: 'shortname', 
+            label: 'Short name', 
+            type: 'input' as const, 
+            placeholder: 'Enter shortname' 
+        },
+        { 
+            name: 'league', 
+            label: 'League', 
+            type: 'input' as const, 
+            placeholder: 'Enter league' 
+        },
+        { 
+            name: 'country', 
+            label: 'Country', 
+            type: 'input' as const, 
+            placeholder: 'Enter country' 
+        },
+        {
+            name: 'sortBy',
+            label: 'Sort by',
+            type: 'select' as const,
+            placeholder: 'Choose field',
+            options: [
+                { label: 'Name', value: 'name' },
+                { label: 'Shortname', value: 'shortname' },
+                { label: 'League', value: 'league' },
+                { label: 'Country', value: 'country' },
+            ],
+        },
+        {
+            name: 'sortOrder',
+            label: '',
+            type: 'select' as const,
+            placeholder: 'Choose type',
+            options: [
+                { label: 'Asc', value: 'asc' },
+                { label: 'Desc', value: 'desc' },
+            ],
+            defaultValue: 'desc'
+        },
+        ...(isAdmin ? [{
+            name: 'includeArchived',
+            label: 'Include\nArchived?',
+            type: 'select' as const,
+            placeholder: 'IncludeArchived?',
+            options: [
+                { label: 'No', value: 'false' },
+                { label: 'Yes', value: 'true' },
+            ],
+            defaultValue: 'false'
+        }] : []),
+      ];
+    return fields;
+  };
+
+
 
 const config = [
     {
@@ -90,14 +107,22 @@ const config = [
 
 const ClubSearchPage = (props: Props) => {
     const [clubsData, setClubsData] = useState<ClubDto[]>([]);
-    const { logoutUser, accessToken } = useAuth();
+    const { logoutUser, IsAdmin} = useAuth();
     const errorHandler = new ErrorHandler(logoutUser);
+    const navigate = useNavigate();
+
+    const fields = createFieldsConfig(IsAdmin());
+
+    const handleRowClick = (clubId: string) => {
+        navigate(`/club/${clubId}`);
+      };
     const handleSearch = async (values: any) => {
         const searchDto: ClubQueryObject = {
             name: values.name,
             shortname: values.shortname,
             league: values.league,
             country: values.country,
+            includeArchived: values.includeArchived ? (values.includeArchived === 'true' ? true : false) : false,
             sortBy: values.sortBy,
             isDescending: values.sortOrder === 'desc' ? true : false,
             pageSize: 20,
@@ -124,7 +149,7 @@ const ClubSearchPage = (props: Props) => {
               </p>
             ) : (
                 <div style={{ marginTop: '20px', width: '80%' }}>
-                    <Table config={config} data={clubsData} />
+                    <Table config={config} data={clubsData} onRowClick={handleRowClick} />
                 </div>
             )}
         </div>

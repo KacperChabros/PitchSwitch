@@ -9,3 +9,18 @@ export const getAllClubsAPI = async (clubQueryObject: ClubQueryObject) => {
     });
     return response;
 };
+
+export const getClubByIdAPI = async (clubId: number) => {
+    const response = await axios.get<ClubDto>(`${clubApiUrl}/getclub/${clubId}`);
+    return response;
+}
+
+export const archiveClubAPI = async (clubId: number) => {
+    const response = await axios.put(`${clubApiUrl}/archiveclub/${clubId}`)
+    return response;
+}
+
+export const restoreClubAPI = async (clubId: number) => {
+    const response = await axios.put<ClubDto>(`${clubApiUrl}/restoreclub/${clubId}`)
+    return response;
+}

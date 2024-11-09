@@ -3,6 +3,7 @@ export type ClubQueryObject = {
     shortname?: string;
     league?: string;
     country?: string;
+    includeArchived?: boolean;
     sortBy?: string;
     isDescending?: boolean;
     pageNumber?: number;
