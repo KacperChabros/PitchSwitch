@@ -38,7 +38,7 @@ export const UserProvider = ({ children }: Props) => {
             axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         }
         setIsReady(true);
-    }, []);
+    }, [accessToken]);
 
     const loginUser = async (username: string, password: string) => {
         await loginAPI(username, password)

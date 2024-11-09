@@ -23,6 +23,7 @@ const Navbar = ({onToggleSidebar}: Props) => {
             {isLoggedIn() && (
                 <div className="hidden md:flex space-x-4 flex-grow flex justify-center">
                     <Link to="/home" className="text-white hover:underline">News</Link>
+                    <Link to="/clubsearch" className="text-white hover:underline">Clubs</Link>
                 </div>
             )}
             {isLoggedIn() ? (
