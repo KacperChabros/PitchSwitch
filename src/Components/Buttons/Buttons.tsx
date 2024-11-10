@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPen, FaTrash, FaArchive, FaUndo } from 'react-icons/fa';
+import { FaPen, FaTrash, FaArchive, FaUndo, FaPlus } from 'react-icons/fa';
 
 type DeleteButtonProps = {
   onClick: () => void;
@@ -61,7 +61,19 @@ const RestoreButton: React.FC<RestoreButtonProps> = ({ onClick, label = "Restore
   </button>
 );
 
-export default RestoreButton;
+type AddClubButtonProps = {
+  onClick: () => void;
+  label?: string;
+};
 
+const AddClubButton: React.FC<AddClubButtonProps> = ({ onClick, label = "Add New Club" }) => (
+  <button
+    onClick={onClick}
+    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none flex items-center space-x-2"
+  >
+    <FaPlus />
+    <span>{label}</span>
+  </button>
+);
 
-export { DeleteButton, UpdateButton, ArchiveButton };
+export { RestoreButton, UpdateButton, ArchiveButton, AddClubButton };

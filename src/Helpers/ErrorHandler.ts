@@ -29,7 +29,9 @@ class ErrorHandler {
             } else {
                 if (error.response?.data?.errors) {
                     this.handleErrors(error.response.data.errors);
-                } else {
+                } else if (error.response?.data?.message){
+                    toast.error(error.response.data.message);
+                }else{
                     toast.error(error.response?.data || `Error: ${error.message}`);
                 }
             }

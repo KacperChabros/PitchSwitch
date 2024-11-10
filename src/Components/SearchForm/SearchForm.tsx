@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Select, Button } from 'antd';
+import { FaSearch } from 'react-icons/fa';
 
 interface Field {
     name: string;
@@ -39,7 +40,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit }) => {
                 </Form.Item>
             ))}
             <Form.Item>
-                <Button type="primary" htmlType="submit">Search</Button>
+                <Button type="primary" htmlType="submit"><FaSearch/>Search</Button>
             </Form.Item>
         </Form>
     );

@@ -23,6 +23,19 @@ export type ClubDto = {
     isArchived: boolean;
 }
 
+export type NewClubDto = {
+    clubId: number;
+    name: string;
+    shortName: string;
+    league: string;
+    country: string;
+    city: string;
+    foundationYear: number;
+    stadium: string;
+    logoUrl?: string;
+    isArchived: boolean;
+}
+
 export type UpdateClubDto = {
     name?: string;
     shortName?: string;
@@ -33,4 +46,15 @@ export type UpdateClubDto = {
     stadium?: string;
     Logo?: File;
     IsLogoDeleted: boolean;
+}
+
+export type AddClubDto = {
+    name: string;
+    shortName: string;
+    league: string;
+    country: string;
+    city: string;
+    foundationYear: number;
+    stadium: string;
+    Logo?: File;
 }

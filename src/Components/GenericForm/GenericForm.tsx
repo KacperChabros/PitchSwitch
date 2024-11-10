@@ -93,74 +93,76 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ fields, onSubmit }) => {
     };
 
     return (
-        <form onSubmit={formik.handleSubmit}>
-            {fields.map((field) => (
-                <div key={field.name} className="mb-4">
-                    <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">
-                        {field.label}
-                    </label>
-                    {field.type === "text" && (
-                        <input
-                            type="text"
-                            id={field.name}
-                            name={field.name}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values[field.name] as string}
-                            className="mt-1 p-2 border border-gray-300 rounded w-full"
-                        />
-                    )}
-                    {field.type === "number" && (
-                        <input
-                            type="number"
-                            id={field.name}
-                            name={field.name}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values[field.name] as number}
-                            className="mt-1 p-2 border border-gray-300 rounded w-full"
-                        />
-                    )}
-                    {field.type === "select" && field.options && (
-                        <Select
-                            id={field.name}
-                            name={field.name}
-                            value={field.options.find(
-                                (option) => option.value === formik.values[field.name]
-                            )}
-                            onChange={(selectedOption: any) => {
-                                formik.setFieldValue(field.name, selectedOption.value);
-                            }}
-                            options={field.options}
-                            className="mt-1 p-2 border border-gray-300 rounded w-full"
-                            getOptionLabel={(option) => option.label}
-                            getOptionValue={(option) => option.value.toString()}
-                        />
-                    )}
-                    {field.type === "file" && (
-                        <input
-                            type="file"
-                            id={field.name}
-                            name={field.name}
-                            onChange={(e) => handleFileChange(e, field.name)}
-                            className="mt-1 p-2 border border-gray-300 rounded w-full"
-                        />
-                    )}
-                    {field.type === "checkbox" && (
-                        <input
-                            type="checkbox"
-                            id={field.name}
-                            name={field.name}
-                            onChange={(e) => handleCheckboxChange(e, field.name)}
-                            checked={formik.values[field.name] as boolean}
-                            className="mt-1"
-                        />
-                    )}
-                    {formik.touched[field.name] && formik.errors[field.name] ? (
-                        <div className="text-red-500 text-sm mt-1">{formik.errors[field.name]}</div>
-                    ) : null}
-                </div>
-            ))}
+        <form onSubmit={formik.handleSubmit} className="w-full max-w-2xl mx-auto overflow-hidden">
+            <div className="max-h-[80vh] overflow-y-auto">
+                {fields.map((field) => (
+                    <div key={field.name} className="mb-4">
+                        <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">
+                            {field.label}
+                        </label>
+                        {field.type === "text" && (
+                            <input
+                                type="text"
+                                id={field.name}
+                                name={field.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values[field.name] as string}
+                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                            />
+                        )}
+                        {field.type === "number" && (
+                            <input
+                                type="number"
+                                id={field.name}
+                                name={field.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values[field.name] as number}
+                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                            />
+                        )}
+                        {field.type === "select" && field.options && (
+                            <Select
+                                id={field.name}
+                                name={field.name}
+                                value={field.options.find(
+                                    (option) => option.value === formik.values[field.name]
+                                )}
+                                onChange={(selectedOption: any) => {
+                                    formik.setFieldValue(field.name, selectedOption.value);
+                                }}
+                                options={field.options}
+                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                                getOptionLabel={(option) => option.label}
+                                getOptionValue={(option) => option.value.toString()}
+                            />
+                        )}
+                        {field.type === "file" && (
+                            <input
+                                type="file"
+                                id={field.name}
+                                name={field.name}
+                                onChange={(e) => handleFileChange(e, field.name)}
+                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                            />
+                        )}
+                        {field.type === "checkbox" && (
+                            <input
+                                type="checkbox"
+                                id={field.name}
+                                name={field.name}
+                                onChange={(e) => handleCheckboxChange(e, field.name)}
+                                checked={formik.values[field.name] as boolean}
+                                className="mt-1"
+                            />
+                        )}
+                        {formik.touched[field.name] && formik.errors[field.name] ? (
+                            <div className="text-red-500 text-sm mt-1">{formik.errors[field.name]}</div>
+                        ) : null}
+                    </div>
+                ))}
+            </div>
             <button
                 type="submit"
                 className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
