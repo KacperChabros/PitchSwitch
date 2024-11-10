@@ -9,7 +9,7 @@ import ProfileCard from "../../Components/ProfileCard/ProfileCard";
 import { ArchiveButton, RestoreButton, UpdateButton } from "../../Components/Buttons/Buttons";
 import { toast } from "react-toastify";
 import Modal from "../../Components/Modal/Modal";
-import UpdateForm, { UpdateField } from "../../Components/GenericForm/GenericForm";
+import GenericForm, { FormField } from "../../Components/GenericForm/GenericForm";
 import * as Yup from "yup";
 
 
@@ -106,7 +106,7 @@ const ClubPage = (props: Props) => {
         }    
     }
 
-    const clubFields: UpdateField[] = [
+    const clubFields: FormField[] = [
       { name: "name", label: "Name", initialValue: club.name, type: "text", validationSchema: Yup.string().required("Name is required").min(3, "Name must be at least 3 characters").max(255, "Name can't be more than 255 characters") },
       { name: "shortName", label: "Shortname", initialValue: club.shortName, type: "text", validationSchema: Yup.string().required("Shortname is required").min(2, "Shortname must be at least 2 characters").max(5, "Shortname can't be more than 5 characters") },
       { name: "league", label: "League", initialValue: club.league, type: "select", options: [
@@ -168,7 +168,7 @@ const ClubPage = (props: Props) => {
         </div>
 
         <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
-                <UpdateForm fields={clubFields} onSubmit={handleUpdateSubmit} />
+                <GenericForm fields={clubFields} onSubmit={handleUpdateSubmit} />
         </Modal>
       </>
     );

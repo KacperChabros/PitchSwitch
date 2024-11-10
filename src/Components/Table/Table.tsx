@@ -12,7 +12,7 @@ type Props = {
         <tr
           key={rowItem[keyField]}
           className="hover:bg-blue-50 transition-colors duration-200 ease-in-out"
-          onClick={() => onRowClick(rowItem.clubId)}
+          onClick={() => onRowClick(rowItem[keyField])}
         >
           {config.map((val: any, index: number) => {
             return (

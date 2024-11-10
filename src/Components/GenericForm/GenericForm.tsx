@@ -3,18 +3,18 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
 
-export type UpdateField = {
+export type FormField = {
     name: string;
     label: string;
-    initialValue: string | number | boolean | null; // Zmiana, żeby obsługiwać boolean (checkbox)
-    type: "text" | "number" | "select" | "file" | "checkbox"; // Dodano 'checkbox'
+    initialValue: string | number | boolean | null;
+    type: "text" | "number" | "select" | "file" | "checkbox";
     options?: { label: string; value: string | number }[];
     validationSchema?: Yup.AnySchema;
 };
 
-type UpdateFormProps = {
-    fields: UpdateField[];
-    onSubmit: (updatedFields: { [key: string]: string | number | File | boolean | null }) => void;
+type FormProps = {
+    fields: FormField[];
+    onSubmit: (formFields: { [key: string]: string | number | File | boolean | null }) => void;
 };
 
 const imageFileValidation = (file: File | null) => {
@@ -35,7 +35,7 @@ const imageFileValidation = (file: File | null) => {
     return true;
 };
 
-const generateValidationSchema = (fields: UpdateField[]) => {
+const generateValidationSchema = (fields: FormField[]) => {
     const shape = fields.reduce((acc, field) => {
         if (field.validationSchema) {
             acc[field.name] = field.validationSchema;
@@ -59,8 +59,7 @@ const generateValidationSchema = (fields: UpdateField[]) => {
                         return true;
                     });
             } else if (field.type === "checkbox") {
-                // Checkbox nie jest wymagany
-                acc[field.name] = Yup.boolean().nullable(); // Nullable, czyli może być zarówno true, false lub null
+                acc[field.name] = Yup.boolean().nullable();
             }
         }
         return acc;
@@ -69,7 +68,7 @@ const generateValidationSchema = (fields: UpdateField[]) => {
     return Yup.object().shape(shape);
 };
 
-const UpdateForm: React.FC<UpdateFormProps> = ({ fields, onSubmit }) => {
+const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
     const validationSchema = generateValidationSchema(fields);
 
     const formik = useFormik({
@@ -173,4 +172,4 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ fields, onSubmit }) => {
     );
 };
 
-export default UpdateForm;
+export default GenericForm;

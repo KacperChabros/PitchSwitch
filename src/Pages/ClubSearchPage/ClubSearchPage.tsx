@@ -8,9 +8,9 @@ import { useAuth } from '../../Context/useAuth';
 import ErrorHandler from '../../Helpers/ErrorHandler';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../Components/Modal/Modal';
-import UpdateForm, { UpdateField } from '../../Components/GenericForm/GenericForm';
+import GenericForm, { FormField } from '../../Components/GenericForm/GenericForm';
 import * as Yup from "yup";
-import { AddClubButton } from '../../Components/Buttons/Buttons';
+import { AddButton } from '../../Components/Buttons/Buttons';
 
 type Props = {}
 
@@ -54,25 +54,21 @@ const createFieldsConfig = (isAdmin: boolean) => {
         },
         {
             name: 'sortOrder',
-            label: '',
+            label: 'Sort Order',
             type: 'select' as const,
             placeholder: 'Choose type',
             options: [
-                { label: 'Asc', value: 'asc' },
-                { label: 'Desc', value: 'desc' },
+                { label: 'Ascending', value: 'asc' },
+                { label: 'Descending', value: 'desc' },
             ],
             defaultValue: 'desc'
         },
         ...(isAdmin ? [{
             name: 'includeArchived',
-            label: 'Include\nArchived?',
-            type: 'select' as const,
+            label: 'Include Archived?',
+            type: 'checkbox' as const,
             placeholder: 'IncludeArchived?',
-            options: [
-                { label: 'No', value: 'false' },
-                { label: 'Yes', value: 'true' },
-            ],
-            defaultValue: 'false'
+            defaultValue: false
         }] : []),
       ];
     return fields;
@@ -110,7 +106,7 @@ const config = [
     }
 ]
 
-const addClubFields: UpdateField[] = [
+const addClubFields: FormField[] = [
     { name: "name", label: "Name", initialValue: "", type: "text", validationSchema: Yup.string().required("Name is required").min(3, "Name must be at least 3 characters").max(255, "Name can't be more than 255 characters") },
     { name: "shortName", label: "Short Name", initialValue: "", type: "text", validationSchema: Yup.string().required("Shortname is required").min(2, "Shortname must be at least 2 characters").max(5, "Shortname can't be more than 5 characters") },
     { name: "league", label: "League", initialValue: "", type: "select", options: [
@@ -197,7 +193,7 @@ const ClubSearchPage = (props: Props) => {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '20px' }}>
             <SearchForm fields={fields} onSubmit={handleSearch} />
             {IsAdmin() ? (<div className="fixed bottom-4 left-4 z-50">
-                <AddClubButton onClick={openModal} />
+                <AddButton onClick={openModal} label="Add New Club" />
             </div>) :(null)}
 
             {clubsData.length === 0 ? (
@@ -211,7 +207,7 @@ const ClubSearchPage = (props: Props) => {
             )}
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <UpdateForm fields={addClubFields} onSubmit={handleAddSubmit} />
+                <GenericForm fields={addClubFields} onSubmit={handleAddSubmit} />
             </Modal>
         </div>
   )
