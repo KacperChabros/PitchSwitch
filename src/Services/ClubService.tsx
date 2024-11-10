@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ClubDto, ClubQueryObject } from '../Dtos/ClubDto';
+import { ClubDto, ClubQueryObject, UpdateClubDto } from '../Dtos/ClubDto';
 
 const clubApiUrl = `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_API_URL}clubs`;
 
@@ -22,5 +22,13 @@ export const archiveClubAPI = async (clubId: number) => {
 
 export const restoreClubAPI = async (clubId: number) => {
     const response = await axios.put<ClubDto>(`${clubApiUrl}/restoreclub/${clubId}`)
+    return response;
+}
+
+export const updateClubAPI = async (clubId: number, updateClubDto: UpdateClubDto) => {
+    const response = await axios.put<ClubDto>(`${clubApiUrl}/updateclub/${clubId}`, updateClubDto,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }});  
     return response;
 }

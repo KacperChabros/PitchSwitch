@@ -22,3 +22,15 @@ export type ClubDto = {
     logoUrl?: string;
     isArchived: boolean;
 }
+
+export type UpdateClubDto = {
+    name?: string;
+    shortName?: string;
+    league?: string;
+    country?: string;
+    city?: string;
+    foundationYear?: number;
+    stadium?: string;
+    Logo?: File;
+    IsLogoDeleted: boolean;
+}
