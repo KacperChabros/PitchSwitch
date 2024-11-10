@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { loginAPI, registerAPI } from "../Services/AuthService";
 import axios from 'axios';
 import { NewUserDto, RegisterUserDto } from "../Dtos/UserDto";
+import {jwtDecode} from 'jwt-decode';
+
 
 type UserContextType = {
     user: User | null;
@@ -14,6 +16,21 @@ type UserContextType = {
     registerUser: (username: string, email: string, password: string, firstName: string, lastName: string, bio?: string | null, profilePicture?: File | null) => Promise<void>
     logoutUser: () => void;
     isLoggedIn: () => boolean;
+    IsAdmin: () => boolean;
+}
+
+interface BackendToken {
+    nameId: string;
+    email: string;
+    given_name: string;
+    name: string;
+    family_name: string;
+    role: string;
+    nbf: number;
+    exp: number;
+    iat: number;
+    iss: string;
+    aud: string;
 }
 
 type Props = { children: React.ReactNode };
@@ -26,6 +43,7 @@ export const UserProvider = ({ children }: Props) => {
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [isReady, setIsReady] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() =>{
         const user = localStorage.getItem("user");
@@ -36,9 +54,11 @@ export const UserProvider = ({ children }: Props) => {
             setAccessToken(accessToken);
             setRefreshToken(refreshToken);
             axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+            const decodedToken = jwtDecode<BackendToken>(accessToken.replace('Bearer',''));
+            setIsAdmin(decodedToken.role === "Admin" ? true : false);
         }
         setIsReady(true);
-    }, []);
+    }, [accessToken]);
 
     const loginUser = async (username: string, password: string) => {
         await loginAPI(username, password)
@@ -100,7 +120,7 @@ export const UserProvider = ({ children }: Props) => {
         return !!user;
     }
 
-    const logoutUser = () =>{
+    const logoutUser = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("user");
@@ -110,8 +130,12 @@ export const UserProvider = ({ children }: Props) => {
         navigate("/");
     }
 
+    const IsAdmin = () => {
+        return isAdmin;
+    }
+
     return (
-        <UserContext.Provider value={{user, accessToken, refreshToken, loginUser, registerUser, logoutUser, isLoggedIn}}>
+        <UserContext.Provider value={{user, accessToken, refreshToken, loginUser, registerUser, logoutUser, isLoggedIn, IsAdmin}}>
              {isReady ? children : null}
         </UserContext.Provider>
     );
