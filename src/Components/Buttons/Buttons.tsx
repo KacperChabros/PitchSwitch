@@ -76,4 +76,4 @@ const AddButton: React.FC<AddButtonProps> = ({ onClick, label = "Add" }) => (
   </button>
 );
 
-export { RestoreButton, UpdateButton, ArchiveButton, AddButton };
+export { RestoreButton, UpdateButton, ArchiveButton, AddButton, DeleteButton };

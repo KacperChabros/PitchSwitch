@@ -20,7 +20,7 @@ const ClubPage = (props: Props) => {
     const { logoutUser, IsAdmin} = useAuth();
     const [club, setClub] = useState<ClubDto | null>(null);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false); // Dodajemy stan do kontrolowania modalu
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
     const errorHandler = new ErrorHandler(logoutUser);
     const navigate = useNavigate();
     useEffect(() => {
@@ -69,7 +69,7 @@ const ClubPage = (props: Props) => {
         setIsUpdateModalOpen(true);
     };
 
-    const handleUpdateSubmit = async (updatedFields: { [key: string]: string | number | File | null | boolean }) => {
+    const handleUpdateSubmit = async (updatedFields: { [key: string]: string | number | File | null | boolean | Date }) => {
       if (club) {
           const updateClubDto: UpdateClubDto = {
             name: updatedFields.name as string,

@@ -1,12 +1,18 @@
 import axios from 'axios';
-import { AddClubDto, ClubDto, ClubQueryObject, NewClubDto, UpdateClubDto } from '../Dtos/ClubDto';
+import { AddClubDto, ClubDto, ClubQueryObject, MinimalClubDto, NewClubDto, UpdateClubDto } from '../Dtos/ClubDto';
+import { PaginatedListDto } from '../Dtos/PaginatedListDto';
 
 const clubApiUrl = `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_API_URL}clubs`;
 
 export const getAllClubsAPI = async (clubQueryObject: ClubQueryObject) => {
-    const response = await axios.get<ClubDto[]>(`${clubApiUrl}/getallclubs`, {
+    const response = await axios.get<PaginatedListDto<ClubDto>>(`${clubApiUrl}/getallclubs`, {
         params: clubQueryObject,
     });
+    return response;
+};
+
+export const getAllMinimalClubsAPI = async () => {
+    const response = await axios.get<MinimalClubDto[]>(`${clubApiUrl}/getallminclubs`);
     return response;
 };
 

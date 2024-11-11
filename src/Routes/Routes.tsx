@@ -10,6 +10,7 @@ import ClubSearchPage from "../Pages/ClubSearchPage/ClubSearchPage";
 import ClubPage from "../Pages/ClubPage/ClubPage";
 import NotFoundPage from "../Pages/NotFoundPage/NotFoundPage";
 import PlayerSearchPage from "../Pages/PlayerSearchPage/PlayerSearchPage";
+import PlayerPage from "../Pages/PlayerPage/PlayerPage";
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
             {path: "clubsearch", element: <ProtectedRoute><ClubSearchPage/></ProtectedRoute>},
             {path: "club/:clubId", element: <ProtectedRoute><ClubPage/></ProtectedRoute>},
             {path: "playersearch", element: <ProtectedRoute><PlayerSearchPage/></ProtectedRoute>},
+            {path: "player/:playerId", element: <ProtectedRoute><PlayerPage/></ProtectedRoute>},
             {path: "*", element: <NotFoundPage />},
         ]
     }

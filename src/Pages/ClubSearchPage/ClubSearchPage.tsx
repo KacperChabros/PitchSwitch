@@ -126,6 +126,9 @@ const addClubFields: FormField[] = [
 
 const ClubSearchPage = (props: Props) => {
     const [clubsData, setClubsData] = useState<ClubDto[]>([]);
+    const [totalCount, setTotalCount] = useState<number>(0);
+    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
     const { logoutUser, IsAdmin} = useAuth();
     const errorHandler = new ErrorHandler(logoutUser);
     const navigate = useNavigate();
@@ -143,7 +146,7 @@ const ClubSearchPage = (props: Props) => {
     const handleRowClick = (clubId: string) => {
         navigate(`/club/${clubId}`);
       };
-    const handleSearch = async (values: any) => {
+      const handleSearch = async (values: any, pageNumber: number) => {
         const searchDto: ClubQueryObject = {
             name: values.name,
             shortname: values.shortname,
@@ -151,31 +154,33 @@ const ClubSearchPage = (props: Props) => {
             country: values.country,
             includeArchived: values.includeArchived ? (values.includeArchived === 'true' ? true : false) : false,
             sortBy: values.sortBy,
-            isDescending: values.sortOrder === 'desc' ? true : false,
-            pageSize: 20,
-            pageNumber: 1
+            isDescending: values.sortOrder === 'desc',
+            pageSize: pageSize,
+            pageNumber: pageNumber,
         };
 
-        try{
+        try {
             const clubs = await getAllClubsAPI(searchDto);
-            setClubsData(clubs.data);
-        }catch(e: any){
+            setClubsData(clubs.data.items);
+            setTotalCount(clubs.data.totalCount);
+        } catch (e: any) {
             errorHandler.handle(e);
             console.log(e);
-            setClubsData([])
-        }     
+            setClubsData([]);
+            setTotalCount(0);
+        }
     };
 
-    const handleAddSubmit = async (updatedFields: { [key: string]: string | number | File | null | boolean }) => {
+    const handleAddSubmit = async (addedFields: { [key: string]: string | number | File | null | boolean | Date }) => {
         const addClubDto: AddClubDto = {
-            name: updatedFields.name as string,
-            shortName: updatedFields.shortName as string,
-            league: updatedFields.league as string,
-            country: updatedFields.country as string,
-            city: updatedFields.city as string,
-            foundationYear: updatedFields.foundationYear as number,
-            stadium: updatedFields.stadium as string,
-            Logo: updatedFields.logo as File,
+            name: addedFields.name as string,
+            shortName: addedFields.shortName as string,
+            league: addedFields.league as string,
+            country: addedFields.country as string,
+            city: addedFields.city as string,
+            foundationYear: addedFields.foundationYear as number,
+            stadium: addedFields.stadium as string,
+            Logo: addedFields.logo as File,
         };
         try{
             const response = await addClubAPI(addClubDto);
@@ -187,11 +192,15 @@ const ClubSearchPage = (props: Props) => {
         }  
     }
 
-
+    const totalPages = Math.ceil(totalCount / pageSize);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '20px' }}>
-            <SearchForm fields={fields} onSubmit={handleSearch} />
+            <SearchForm fields={fields} onSubmit={handleSearch} 
+                                totalPages={totalPages}
+                                currentPage={pageNumber}
+                                onPageChange={setPageNumber}
+            />
             {IsAdmin() ? (<div className="fixed bottom-4 left-4 z-50">
                 <AddButton onClick={openModal} label="Add New Club" />
             </div>) :(null)}

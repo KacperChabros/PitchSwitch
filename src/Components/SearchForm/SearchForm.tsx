@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Select, Button, DatePicker, Checkbox } from 'antd';
 import { FaSearch } from 'react-icons/fa';
 
@@ -13,14 +13,42 @@ interface Field {
 
 interface SearchFormProps {
     fields: Field[];
-    onSubmit: (values: any) => void;
+    onSubmit: (values: any, pageNumber: number) => void;
+    totalPages: number;
+    currentPage: number;
+    onPageChange: (pageNumber: number) => void;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit }) => {
+const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit, totalPages, currentPage, onPageChange }) => {
+    const [pageNumber, setPageNumber] = useState(currentPage);
+
+    const handleFormSubmit = (values: any) => {
+        onSubmit(values, pageNumber);
+    };
+
+    const handleNextPage = () => {
+        if (pageNumber < totalPages) {
+            setPageNumber((prev) => prev + 1);
+            onPageChange(pageNumber + 1);
+            form.submit();
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (pageNumber > 1) {
+            setPageNumber((prev) => prev - 1);
+            onPageChange(pageNumber - 1);
+            form.submit();
+        }
+    };
+
+    const [form] = Form.useForm();
+
     return (
         <Form
+            form={form}
             layout="vertical"
-            onFinish={onSubmit}
+            onFinish={handleFormSubmit}
             style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -72,13 +100,35 @@ const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit }) => {
                     ) : null}
                 </Form.Item>
             ))}
+
             <Form.Item style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                 <Button type="primary" htmlType="submit">
                     <FaSearch /> Search
                 </Button>
             </Form.Item>
+
+            <div className="flex items-center justify-center gap-4 w-full">
+                <Button 
+                    onClick={handlePreviousPage} 
+                    disabled={pageNumber === 1} 
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 disabled:opacity-50"
+                >
+                    Previous
+                </Button>
+                
+                <span className="text-lg font-semibold text-gray-700">Page {pageNumber}</span>
+                
+                <Button 
+                    onClick={handleNextPage} 
+                    disabled={pageNumber >= totalPages} 
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 disabled:opacity-50"
+                >
+                    Next
+                </Button>
+            </div>
         </Form>
     );
 };
 
 export default SearchForm;
+
