@@ -3,24 +3,22 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
 
-export type UpdateField = {
+export type FormField = {
     name: string;
     label: string;
-    initialValue: string | number | boolean | null; // Zmiana, żeby obsługiwać boolean (checkbox)
-    type: "text" | "number" | "select" | "file" | "checkbox"; // Dodano 'checkbox'
+    initialValue: string | number | boolean | null | Date;
+    type: "text" | "number" | "select" | "file" | "checkbox" | "date";
     options?: { label: string; value: string | number }[];
     validationSchema?: Yup.AnySchema;
 };
 
-type UpdateFormProps = {
-    fields: UpdateField[];
-    onSubmit: (updatedFields: { [key: string]: string | number | File | boolean | null }) => void;
+type FormProps = {
+    fields: FormField[];
+    onSubmit: (formFields: { [key: string]: string | number | File | boolean | null | Date }) => void;
 };
 
 const imageFileValidation = (file: File | null) => {
-    if (!file) {
-        return true;
-    }
+    if (!file) return true;
 
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     if (!allowedTypes.includes(file.type)) {
@@ -35,7 +33,7 @@ const imageFileValidation = (file: File | null) => {
     return true;
 };
 
-const generateValidationSchema = (fields: UpdateField[]) => {
+const generateValidationSchema = (fields: FormField[]) => {
     const shape = fields.reduce((acc, field) => {
         if (field.validationSchema) {
             acc[field.name] = field.validationSchema;
@@ -52,15 +50,12 @@ const generateValidationSchema = (fields: UpdateField[]) => {
                 acc[field.name] = Yup.mixed().nullable()
                     .test("is-image", "The file must be an image and <3MB", (value) => {
                         const file = value as File | null;
-                        const validationResult = imageFileValidation(file);
-                        if (validationResult !== true) {
-                            return false;
-                        }
-                        return true;
+                        return imageFileValidation(file) === true;
                     });
             } else if (field.type === "checkbox") {
-                // Checkbox nie jest wymagany
-                acc[field.name] = Yup.boolean().nullable(); // Nullable, czyli może być zarówno true, false lub null
+                acc[field.name] = Yup.boolean().nullable();
+            } else if (field.type === "date") {
+                acc[field.name] = Yup.date().nullable().required(`${field.label} is required`);
             }
         }
         return acc;
@@ -69,14 +64,14 @@ const generateValidationSchema = (fields: UpdateField[]) => {
     return Yup.object().shape(shape);
 };
 
-const UpdateForm: React.FC<UpdateFormProps> = ({ fields, onSubmit }) => {
+const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
     const validationSchema = generateValidationSchema(fields);
 
     const formik = useFormik({
         initialValues: fields.reduce((acc, field) => {
             acc[field.name] = field.initialValue;
             return acc;
-        }, {} as { [key: string]: string | number | File | boolean | null }),
+        }, {} as { [key: string]: string | number | File | boolean | null | Date }),
         validationSchema,
         onSubmit: (values) => {
             onSubmit(values);
@@ -122,6 +117,17 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ fields, onSubmit }) => {
                                 className="mt-1 p-2 border border-gray-300 rounded w-full"
                             />
                         )}
+                        {field.type === "date" && (
+                            <input
+                                type="date"
+                                id={field.name}
+                                name={field.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values[field.name] ? (formik.values[field.name] as Date).toISOString().split('T')[0] : ""}
+                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                            />
+                        )}
                         {field.type === "select" && field.options && (
                             <Select
                                 id={field.name}
@@ -136,6 +142,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ fields, onSubmit }) => {
                                 className="mt-1 p-2 border border-gray-300 rounded w-full"
                                 getOptionLabel={(option) => option.label}
                                 getOptionValue={(option) => option.value.toString()}
+                                maxMenuHeight={200}
                             />
                         )}
                         {field.type === "file" && (
@@ -173,4 +180,4 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ fields, onSubmit }) => {
     );
 };
 
-export default UpdateForm;
+export default GenericForm;

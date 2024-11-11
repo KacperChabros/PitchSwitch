@@ -24,6 +24,7 @@ const Navbar = ({onToggleSidebar}: Props) => {
                 <div className="hidden md:flex space-x-4 flex-grow flex justify-center">
                     <Link to="/home" className="text-white hover:underline">News</Link>
                     <Link to="/clubsearch" className="text-white hover:underline">Clubs</Link>
+                    <Link to="/playersearch" className="text-white hover:underline">Players</Link>
                 </div>
             )}
             {isLoggedIn() ? (

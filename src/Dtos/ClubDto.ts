@@ -58,3 +58,10 @@ export type AddClubDto = {
     stadium: string;
     Logo?: File;
 }
+
+export type MinimalClubDto = {
+    clubId: number;
+    name: string;
+    shortname: string;
+    logoUrl: string;
+}

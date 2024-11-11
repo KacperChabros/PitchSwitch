@@ -8,9 +8,9 @@ import { useAuth } from '../../Context/useAuth';
 import ErrorHandler from '../../Helpers/ErrorHandler';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../Components/Modal/Modal';
-import UpdateForm, { UpdateField } from '../../Components/GenericForm/GenericForm';
+import GenericForm, { FormField } from '../../Components/GenericForm/GenericForm';
 import * as Yup from "yup";
-import { AddClubButton } from '../../Components/Buttons/Buttons';
+import { AddButton } from '../../Components/Buttons/Buttons';
 
 type Props = {}
 
@@ -54,25 +54,21 @@ const createFieldsConfig = (isAdmin: boolean) => {
         },
         {
             name: 'sortOrder',
-            label: '',
+            label: 'Sort Order',
             type: 'select' as const,
             placeholder: 'Choose type',
             options: [
-                { label: 'Asc', value: 'asc' },
-                { label: 'Desc', value: 'desc' },
+                { label: 'Ascending', value: 'asc' },
+                { label: 'Descending', value: 'desc' },
             ],
             defaultValue: 'desc'
         },
         ...(isAdmin ? [{
             name: 'includeArchived',
-            label: 'Include\nArchived?',
-            type: 'select' as const,
+            label: 'Include Archived?',
+            type: 'checkbox' as const,
             placeholder: 'IncludeArchived?',
-            options: [
-                { label: 'No', value: 'false' },
-                { label: 'Yes', value: 'true' },
-            ],
-            defaultValue: 'false'
+            defaultValue: false
         }] : []),
       ];
     return fields;
@@ -110,7 +106,7 @@ const config = [
     }
 ]
 
-const addClubFields: UpdateField[] = [
+const addClubFields: FormField[] = [
     { name: "name", label: "Name", initialValue: "", type: "text", validationSchema: Yup.string().required("Name is required").min(3, "Name must be at least 3 characters").max(255, "Name can't be more than 255 characters") },
     { name: "shortName", label: "Short Name", initialValue: "", type: "text", validationSchema: Yup.string().required("Shortname is required").min(2, "Shortname must be at least 2 characters").max(5, "Shortname can't be more than 5 characters") },
     { name: "league", label: "League", initialValue: "", type: "select", options: [
@@ -130,6 +126,9 @@ const addClubFields: UpdateField[] = [
 
 const ClubSearchPage = (props: Props) => {
     const [clubsData, setClubsData] = useState<ClubDto[]>([]);
+    const [totalCount, setTotalCount] = useState<number>(0);
+    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
     const { logoutUser, IsAdmin} = useAuth();
     const errorHandler = new ErrorHandler(logoutUser);
     const navigate = useNavigate();
@@ -147,7 +146,7 @@ const ClubSearchPage = (props: Props) => {
     const handleRowClick = (clubId: string) => {
         navigate(`/club/${clubId}`);
       };
-    const handleSearch = async (values: any) => {
+      const handleSearch = async (values: any, pageNumber: number) => {
         const searchDto: ClubQueryObject = {
             name: values.name,
             shortname: values.shortname,
@@ -155,31 +154,33 @@ const ClubSearchPage = (props: Props) => {
             country: values.country,
             includeArchived: values.includeArchived ? (values.includeArchived === 'true' ? true : false) : false,
             sortBy: values.sortBy,
-            isDescending: values.sortOrder === 'desc' ? true : false,
-            pageSize: 20,
-            pageNumber: 1
+            isDescending: values.sortOrder === 'desc',
+            pageSize: pageSize,
+            pageNumber: pageNumber,
         };
 
-        try{
+        try {
             const clubs = await getAllClubsAPI(searchDto);
-            setClubsData(clubs.data);
-        }catch(e: any){
+            setClubsData(clubs.data.items);
+            setTotalCount(clubs.data.totalCount);
+        } catch (e: any) {
             errorHandler.handle(e);
             console.log(e);
-            setClubsData([])
-        }     
+            setClubsData([]);
+            setTotalCount(0);
+        }
     };
 
-    const handleAddSubmit = async (updatedFields: { [key: string]: string | number | File | null | boolean }) => {
+    const handleAddSubmit = async (addedFields: { [key: string]: string | number | File | null | boolean | Date }) => {
         const addClubDto: AddClubDto = {
-            name: updatedFields.name as string,
-            shortName: updatedFields.shortName as string,
-            league: updatedFields.league as string,
-            country: updatedFields.country as string,
-            city: updatedFields.city as string,
-            foundationYear: updatedFields.foundationYear as number,
-            stadium: updatedFields.stadium as string,
-            Logo: updatedFields.logo as File,
+            name: addedFields.name as string,
+            shortName: addedFields.shortName as string,
+            league: addedFields.league as string,
+            country: addedFields.country as string,
+            city: addedFields.city as string,
+            foundationYear: addedFields.foundationYear as number,
+            stadium: addedFields.stadium as string,
+            Logo: addedFields.logo as File,
         };
         try{
             const response = await addClubAPI(addClubDto);
@@ -191,13 +192,17 @@ const ClubSearchPage = (props: Props) => {
         }  
     }
 
-
+    const totalPages = Math.ceil(totalCount / pageSize);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '20px' }}>
-            <SearchForm fields={fields} onSubmit={handleSearch} />
+            <SearchForm fields={fields} onSubmit={handleSearch} 
+                                totalPages={totalPages}
+                                currentPage={pageNumber}
+                                onPageChange={setPageNumber}
+            />
             {IsAdmin() ? (<div className="fixed bottom-4 left-4 z-50">
-                <AddClubButton onClick={openModal} />
+                <AddButton onClick={openModal} label="Add New Club" />
             </div>) :(null)}
 
             {clubsData.length === 0 ? (
@@ -211,7 +216,7 @@ const ClubSearchPage = (props: Props) => {
             )}
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <UpdateForm fields={addClubFields} onSubmit={handleAddSubmit} />
+                <GenericForm fields={addClubFields} onSubmit={handleAddSubmit} />
             </Modal>
         </div>
   )
