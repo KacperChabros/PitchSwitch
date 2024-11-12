@@ -150,6 +150,20 @@ const createAddFieldsConfig = (clubs: { clubId: string; name: string }[]) => {
                 .required("Date of birth is required")
                 .max(new Date(), "Date of birth must be in the past")
         },
+        {
+            name: "clubId",
+            label: "Club",
+            initialValue: "",
+            type: "select",
+            options: [
+                { label: "Unemployed", value: "" },
+                ...clubs.map((club) => ({
+                    label: club.name,
+                    value: club.clubId,
+                })),
+            ],
+            validationSchema: Yup.number().nullable()
+        },
         { 
             name: "nationality", 
             label: "Nationality", 
@@ -196,20 +210,6 @@ const createAddFieldsConfig = (clubs: { clubId: string; name: string }[]) => {
             initialValue: "", 
             type: "number", 
             validationSchema: Yup.number().required("Market value is required").min(0, "Market value can't be negative").max(1000000000, "Market value can't be more than 1000000000")
-        },
-        {
-            name: "clubId",
-            label: "Club",
-            initialValue: "",
-            type: "select",
-            options: [
-                { label: "Unemployed", value: "" },
-                ...clubs.map((club) => ({
-                    label: club.name,
-                    value: club.clubId,
-                })),
-            ],
-            validationSchema: Yup.number().nullable()
         },
         { 
             name: "photo", 
@@ -288,7 +288,7 @@ const PlayerSearchPage = (props: Props) => {
     const [clubs, setClubs] = useState<{ clubId: string; name: string }[]>([]);
     const [totalCount, setTotalCount] = useState<number>(0);
     const [pageNumber, setPageNumber] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(2);
+    const [pageSize, setPageSize] = useState<number>(10);
     const { logoutUser, IsAdmin} = useAuth();
     const errorHandler = new ErrorHandler(logoutUser);
     const navigate = useNavigate();

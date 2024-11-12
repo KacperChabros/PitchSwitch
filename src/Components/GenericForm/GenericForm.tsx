@@ -122,9 +122,16 @@ const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
                                 type="date"
                                 id={field.name}
                                 name={field.name}
-                                onChange={formik.handleChange}
+                                onChange={(e) => {
+                                    const date = e.target.value ? new Date(e.target.value) : null;
+                                    formik.setFieldValue(field.name, date);
+                                }}
                                 onBlur={formik.handleBlur}
-                                value={formik.values[field.name] ? (formik.values[field.name] as Date).toISOString().split('T')[0] : ""}
+                                value={
+                                    formik.values[field.name] instanceof Date
+                                        ? (formik.values[field.name] as Date).toISOString().split('T')[0]
+                                        : ""
+                                }
                                 className="mt-1 p-2 border border-gray-300 rounded w-full"
                             />
                         )}

@@ -30,6 +30,18 @@ export type NewPlayerDto = {
     club?: MinimalClubDto;
 }
 
+export type MinimalPlayerDto = {
+    playerId: number;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+    nationality: string;
+    position: string;
+    marketValue: number;
+    photoUrl?: string;
+    club?: MinimalClubDto
+}
+
 export type AddPlayerDto = {
     firstName: string;
     lastName: string;
