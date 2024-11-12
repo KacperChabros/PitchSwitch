@@ -13,6 +13,8 @@ import PlayerSearchPage from "../Pages/PlayerSearchPage/PlayerSearchPage";
 import PlayerPage from "../Pages/PlayerPage/PlayerPage";
 import TransferSearchPages from "../Pages/TransferSearchPage/TransferSearchPages";
 import TransferPage from "../Pages/TransferPage/TransferPage";
+import TransferRumourSearchPage from "../Pages/TransferRumourSearchPage/TransferRumourSearchPage";
+import TransferRumourPage from "../Pages/TransferRumourPage/TransferRumourPage";
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +31,9 @@ export const router = createBrowserRouter([
             {path: "player/:playerId", element: <ProtectedRoute><PlayerPage/></ProtectedRoute>},
             {path: "transfersearch", element: <ProtectedRoute><TransferSearchPages/></ProtectedRoute>},
             {path: "transfer/:transferId", element: <ProtectedRoute><TransferPage/></ProtectedRoute>},
+            {path: "transferrumoursearch", element: <ProtectedRoute><TransferRumourSearchPage/></ProtectedRoute>},
+            {path: "transferrumour/:transferRumourId", element: <ProtectedRoute><TransferRumourPage/></ProtectedRoute>},
+
             {path: "*", element: <NotFoundPage />},
         ]
     }

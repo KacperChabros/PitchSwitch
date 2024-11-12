@@ -17,6 +17,7 @@ type UserContextType = {
     logoutUser: () => void;
     isLoggedIn: () => boolean;
     IsAdmin: () => boolean;
+    IsJournalist: () => boolean;
 }
 
 interface BackendToken {
@@ -44,6 +45,7 @@ export const UserProvider = ({ children }: Props) => {
     const [user, setUser] = useState<User | null>(null);
     const [isReady, setIsReady] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isJournalist, setIsJournalist] = useState(false);
 
     useEffect(() =>{
         const user = localStorage.getItem("user");
@@ -56,6 +58,7 @@ export const UserProvider = ({ children }: Props) => {
             axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
             const decodedToken = jwtDecode<BackendToken>(accessToken.replace('Bearer',''));
             setIsAdmin(decodedToken.role === "Admin" ? true : false);
+            setIsJournalist(decodedToken.role === "Journalist" ? true : false);
         }
         setIsReady(true);
     }, [accessToken]);
@@ -134,8 +137,12 @@ export const UserProvider = ({ children }: Props) => {
         return isAdmin;
     }
 
+    const IsJournalist = () => {
+        return isJournalist;
+    }
+
     return (
-        <UserContext.Provider value={{user, accessToken, refreshToken, loginUser, registerUser, logoutUser, isLoggedIn, IsAdmin}}>
+        <UserContext.Provider value={{user, accessToken, refreshToken, loginUser, registerUser, logoutUser, isLoggedIn, IsAdmin, IsJournalist}}>
              {isReady ? children : null}
         </UserContext.Provider>
     );
