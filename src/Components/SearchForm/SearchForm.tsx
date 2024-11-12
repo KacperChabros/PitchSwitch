@@ -5,10 +5,10 @@ import { FaSearch } from 'react-icons/fa';
 interface Field {
     name: string;
     label: string;
-    type: 'input' | 'select' | 'date' | 'checkbox';
+    type: 'input' | 'select' | 'date' | 'checkbox' | 'number';
     options?: { label: string; value: string }[];
     placeholder?: string;
-    defaultValue?: string | boolean;
+    defaultValue?: string | boolean | number;
 }
 
 interface SearchFormProps {
@@ -21,6 +21,7 @@ interface SearchFormProps {
 
 const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit, totalPages, currentPage, onPageChange }) => {
     const [pageNumber, setPageNumber] = useState(currentPage);
+    const [form] = Form.useForm();
 
     const handleFormSubmit = (values: any) => {
         onSubmit(values, pageNumber);
@@ -41,8 +42,6 @@ const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit, totalPages, c
             form.submit();
         }
     };
-
-    const [form] = Form.useForm();
 
     return (
         <Form
@@ -97,6 +96,12 @@ const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit, totalPages, c
                         />
                     ) : field.type === 'checkbox' ? (
                         <Checkbox>{field.label}</Checkbox>
+                    ) : field.type === 'number' ? (
+                        <Input
+                            type="number"
+                            placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+                            style={{ width: '100%' }}
+                        />
                     ) : null}
                 </Form.Item>
             ))}
@@ -131,4 +136,3 @@ const SearchForm: React.FC<SearchFormProps> = ({ fields, onSubmit, totalPages, c
 };
 
 export default SearchForm;
-

@@ -92,7 +92,6 @@ const PlayerPage = (props: Props) => {
               isClubIdDeleted: updatedFields.clubId === 'unemployed'
           };
             try{
-                console.log(updatePlayerDto)
                 const response = await updatePlayerAPI(Number(playerId), updatePlayerDto);
                 toast.success("Player has been updated!");
                 setPlayer(response.data);
@@ -209,7 +208,6 @@ const PlayerPage = (props: Props) => {
         </div>
 
         <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
-                <h1>Modal</h1>
                 <GenericForm fields={playerFields} onSubmit={handleUpdateSubmit} />
         </Modal>
       </>

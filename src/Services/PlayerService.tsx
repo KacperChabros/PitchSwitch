@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AddPlayerDto, NewPlayerDto, PlayerDto, PlayerQueryObject, UpdatePlayerDto } from '../Dtos/PlayerDto';
+import { AddPlayerDto, MinimalPlayerDto, NewPlayerDto, PlayerDto, PlayerQueryObject, UpdatePlayerDto } from '../Dtos/PlayerDto';
 import { PaginatedListDto } from '../Dtos/PaginatedListDto';
 
 const playerApiUrl = `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_API_URL}players`;
@@ -8,6 +8,11 @@ export const getAllPlayersAPI = async (playerQueryObject: PlayerQueryObject) => 
     const response = await axios.get<PaginatedListDto<PlayerDto>>(`${playerApiUrl}/getplayers`, {
         params: playerQueryObject,
     });
+    return response;
+};
+
+export const getAllMinimalPlayersAPI = async () => {
+    const response = await axios.get<MinimalPlayerDto[]>(`${playerApiUrl}/getallminplayers`);
     return response;
 };
 
