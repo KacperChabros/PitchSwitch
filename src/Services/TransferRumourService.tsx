@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AddTransferRumourDto, NewTransferRumourDto, TransferRumourDto, TransferRumourQueryObject, UpdateTransferRumourDto } from '../Dtos/TransferRumourDto';
+import { AddTransferRumourDto, MinimalTransferRumourDto, NewTransferRumourDto, TransferRumourDto, TransferRumourQueryObject, UpdateTransferRumourDto } from '../Dtos/TransferRumourDto';
 import { PaginatedListDto } from '../Dtos/PaginatedListDto';
 
 const transferRumourApiUrl = `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_API_URL}transferrumours`;
@@ -8,6 +8,11 @@ export const getAllTransferRumoursAPI = async (transferRumourQueryObject: Transf
     const response = await axios.get<PaginatedListDto<TransferRumourDto>>(`${transferRumourApiUrl}/gettransferrumours`, {
         params: transferRumourQueryObject,
     });
+    return response;
+};
+
+export const getAllMinimalTransferRumoursAPI = async () => {
+    const response = await axios.get<MinimalTransferRumourDto[]>(`${transferRumourApiUrl}/getallmintransferrumours`);
     return response;
 };
 

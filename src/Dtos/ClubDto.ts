@@ -62,6 +62,6 @@ export type AddClubDto = {
 export type MinimalClubDto = {
     clubId: number;
     name: string;
-    shortname: string;
+    shortName: string;
     logoUrl: string;
 }

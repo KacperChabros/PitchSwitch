@@ -7,7 +7,7 @@ export type FormField = {
     name: string;
     label: string;
     initialValue: string | number | boolean | null | Date;
-    type: "text" | "number" | "select" | "file" | "checkbox" | "date";
+    type: "text" | "number" | "select" | "file" | "checkbox" | "date" | "textarea";  // Dodajemy "textarea"
     options?: { label: string; value: string | number }[];
     validationSchema?: Yup.AnySchema;
 };
@@ -115,6 +115,17 @@ const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
                                 onBlur={formik.handleBlur}
                                 value={formik.values[field.name] as number}
                                 className="mt-1 p-2 border border-gray-300 rounded w-full"
+                            />
+                        )}
+                        {field.type === "textarea" && (
+                            <textarea
+                                id={field.name}
+                                name={field.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values[field.name] as string}
+                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                                rows={5}
                             />
                         )}
                         {field.type === "date" && (

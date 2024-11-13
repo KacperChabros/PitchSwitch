@@ -152,7 +152,7 @@ const ClubSearchPage = (props: Props) => {
             shortname: values.shortname,
             league: values.league,
             country: values.country,
-            includeArchived: values.includeArchived ? (values.includeArchived === 'true' ? true : false) : false,
+            includeArchived: values.includeArchived,
             sortBy: values.sortBy,
             isDescending: values.sortOrder === 'desc',
             pageSize: pageSize,

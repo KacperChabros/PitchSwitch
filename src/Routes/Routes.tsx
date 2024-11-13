@@ -15,6 +15,7 @@ import TransferSearchPages from "../Pages/TransferSearchPage/TransferSearchPages
 import TransferPage from "../Pages/TransferPage/TransferPage";
 import TransferRumourSearchPage from "../Pages/TransferRumourSearchPage/TransferRumourSearchPage";
 import TransferRumourPage from "../Pages/TransferRumourPage/TransferRumourPage";
+import PostPage from "../Pages/PostPage/PostPage";
 
 export const router = createBrowserRouter([
     {
@@ -33,7 +34,7 @@ export const router = createBrowserRouter([
             {path: "transfer/:transferId", element: <ProtectedRoute><TransferPage/></ProtectedRoute>},
             {path: "transferrumoursearch", element: <ProtectedRoute><TransferRumourSearchPage/></ProtectedRoute>},
             {path: "transferrumour/:transferRumourId", element: <ProtectedRoute><TransferRumourPage/></ProtectedRoute>},
-
+            {path: "post/:postId", element: <ProtectedRoute><PostPage/></ProtectedRoute>},
             {path: "*", element: <NotFoundPage />},
         ]
     }
