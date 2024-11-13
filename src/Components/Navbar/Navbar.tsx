@@ -26,6 +26,7 @@ const Navbar = ({onToggleSidebar}: Props) => {
                     <Link to="/clubsearch" className="text-white hover:underline">Clubs</Link>
                     <Link to="/playersearch" className="text-white hover:underline">Players</Link>
                     <Link to="/transfersearch" className="text-white hover:underline">Transfers</Link>
+                    <Link to="/transferrumoursearch" className="text-white hover:underline">Transfer Rumours</Link>
                 </div>
             )}
             {isLoggedIn() ? (

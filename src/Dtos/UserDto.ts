@@ -21,3 +21,9 @@ export type RegisterUserDto = {
     bio?: string | null;
     profilePicture?: File | null;
 }
+
+export type MinimalUserDto = {
+    userId: string;
+    userName: string;
+    profilePictureUrl?: string;
+}

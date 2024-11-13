@@ -47,6 +47,7 @@ const Sidebar = ({isOpen, onClose}: Props) => {
                             <li><Link to="/clubsearch" onClick={onClose} className="block p-4 hover:bg-gray-700">Clubs</Link></li>
                             <li><Link to="/playersearch" onClick={onClose} className="block p-4 hover:bg-gray-700">Players</Link></li>
                             <li><Link to="/transfersearch" onClick={onClose} className="block p-4 hover:bg-gray-700">Transfers</Link></li>
+                            <li><Link to="/transferrumoursearch" onClick={onClose} className="block p-4 hover:bg-gray-700">Transfer Rumours</Link></li>
                         </ul>
                         <div className="mt-auto p-4 space-y-2">
                             <a onClick={logoutUser} className="bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition duration-300 w-full block text-center">Logout</a>
