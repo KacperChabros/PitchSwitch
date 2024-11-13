@@ -62,3 +62,16 @@ export type UpdateTransferRumourDto = {
     buyingClubId?: number | null;
     isBuyingClubDeleted: boolean;
 }
+
+export type MinimalTransferRumourDto = {
+    transferRumourId: number;
+    transferType: TransferType;
+    rumouredFee: number;
+    confidenceLevel: number;
+    isConfirmed: boolean;
+    isArchived: boolean;
+    createdByUser: MinimalUserDto;
+    player: MinimalPlayerDto;
+    sellingClub?: MinimalClubDto;
+    buyingClub?: MinimalClubDto;
+}

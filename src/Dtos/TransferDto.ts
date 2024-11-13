@@ -58,6 +58,16 @@ export type UpdateTransferDto = {
     isBuyingClubDeleted: boolean;
 }
 
+export type MinimalTransferDto = {
+    transferId: number;
+    transferType: TransferType;
+    transferDate: Date;
+    transferFee: number;
+    player: MinimalPlayerDto;
+    sellingClub?: MinimalClubDto;
+    buyingClub?: MinimalClubDto;
+}
+
 export enum TransferType {
     Permament,
     Loan

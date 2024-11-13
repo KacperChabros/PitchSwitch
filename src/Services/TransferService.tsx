@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AddTransferDto, NewTransferDto, TransferDto, TransferQueryObject, UpdateTransferDto } from '../Dtos/TransferDto';
+import { AddTransferDto, MinimalTransferDto, NewTransferDto, TransferDto, TransferQueryObject, UpdateTransferDto } from '../Dtos/TransferDto';
 import { PaginatedListDto } from '../Dtos/PaginatedListDto';
 
 const transferApiUrl = `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_API_URL}transfers`;
@@ -8,6 +8,11 @@ export const getAllTransfersAPI = async (transferQueryObject: TransferQueryObjec
     const response = await axios.get<PaginatedListDto<TransferDto>>(`${transferApiUrl}/gettransfers`, {
         params: transferQueryObject,
     });
+    return response;
+};
+
+export const getAllMinimalTransfersAPI = async () => {
+    const response = await axios.get<MinimalTransferDto[]>(`${transferApiUrl}/getallmintransfers`);
     return response;
 };
 
