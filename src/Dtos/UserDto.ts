@@ -1,3 +1,6 @@
+import { MinimalClubDto } from "./ClubDto";
+import { ListElementPostDto, MinimalPostDto } from "./PostDto";
+
 export type NewUserDto = {
     userId: string;
     userName: string;
@@ -10,6 +13,18 @@ export type NewUserDto = {
         accessToken: string;
         refreshToken: string;
     }
+}
+
+export type GetUserDto = {
+    userName: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    profilePictureUrl?: string;
+    bio?: string;
+    favouriteClub?: MinimalClubDto;
+    registrationDate: Date;
+    posts: ListElementPostDto[];
 }
 
 export type RegisterUserDto = {
@@ -26,4 +41,16 @@ export type MinimalUserDto = {
     userId: string;
     userName: string;
     profilePictureUrl?: string;
+}
+
+export type UpdateUserDto = {
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    profilePicture?: File;
+    isProfilePictureDeleted: boolean;
+    bio?: string;
+    isBioDeleted: boolean;
+    favouriteClubId?: number | null;
+    isFavouriteClubIdDeleted: boolean;
 }

@@ -398,7 +398,7 @@ const PostPage = (props: Props) => {
                                 subTitle={post.createdByUser.userName} 
                                 imageUrl={post.createdByUser.profilePictureUrl ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${post.createdByUser.profilePictureUrl}` 
                                 : "/images/default_user_picture.png" }
-                                href={`/user/${post.createdByUser.userId}`}
+                                href={`/user/${post.createdByUser.userName}`}
                             />
                         </div>
                     </div>

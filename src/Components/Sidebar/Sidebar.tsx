@@ -26,21 +26,23 @@ const Sidebar = ({isOpen, onClose}: Props) => {
 
     return (
         <aside className={`fixed inset-0 bg-gray-800 bg-opacity-75 z-50 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <div ref={sidebarRef} className={`fixed top-0 left-0 h-full w-64 bg-gray-900 text-white transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
+            <div ref={sidebarRef} className={`fixed top-0 left-0 h-full w-72 bg-gray-900 text-white transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
                 
                 {isLoggedIn() ? (
                     <div>
                         <div className="flex items-center space-x-4">
                             <button className="text-white p-4" onClick={onClose}>X</button>
-                            <span className="text-white">Welcome, {user?.userName}</span>
-                            <img
-                                src={user?.profilePictureUrl && user.profilePictureUrl.trim().length > 0 
-                                    ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${user.profilePictureUrl}` 
-                                    : "/images/default_user_picture.png"
-                                }
-                                alt="Profile"
-                                className="w-7 h-7 rounded-full object-cover"
-                            />
+                            <Link to={`/user/${user?.userName}`} className="flex items-center space-x-2 hover:bg-gray-700">
+                                <span className="text-white">Welcome, {user?.userName}</span>
+                                <img
+                                    src={user?.profilePictureUrl && user.profilePictureUrl.trim().length > 0 
+                                        ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${user.profilePictureUrl}` 
+                                        : "/images/default_user_picture.png"
+                                    }
+                                    alt="Profile"
+                                    className="w-7 h-7 rounded-full object-cover"
+                                />
+                            </Link>
                         </div>  
                         <ul className="">
                             <li><Link to="/home" onClick={onClose} className="block p-4 hover:bg-gray-700">News</Link></li>

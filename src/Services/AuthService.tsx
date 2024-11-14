@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RegisterUserDto, NewUserDto } from '../Dtos/UserDto';
+import { RegisterUserDto, NewUserDto, GetUserDto, UpdateUserDto } from '../Dtos/UserDto';
 
 const accountApiUrl = `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_API_URL}account`;
 
@@ -27,3 +27,21 @@ export const registerAPI = async (username: string, email: string, password: str
         }});   
     return response;
 };
+
+export const getUserByNameAPI = async (username: string) => {
+    const response = await axios.get<GetUserDto>(`${accountApiUrl}/getuserbynamewithdata/${username}`);   
+    return response;
+}
+
+export const updateUserAPI = async (updateUserDto: UpdateUserDto) => {
+    const response = await axios.put<GetUserDto>(`${accountApiUrl}/updateuserdata`, updateUserDto,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }});  
+    return response;
+}
+
+export const deleteUserAPI = async () => {
+    const response = await axios.delete(`${accountApiUrl}/deleteuser`);
+    return response;
+}

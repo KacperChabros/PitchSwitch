@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
@@ -7,7 +7,7 @@ export type FormField = {
     name: string;
     label: string;
     initialValue: string | number | boolean | null | Date;
-    type: "text" | "number" | "select" | "file" | "checkbox" | "date" | "textarea";  // Dodajemy "textarea"
+    type: "text" | "number" | "select" | "file" | "checkbox" | "date" | "textarea" | "password";
     options?: { label: string; value: string | number }[];
     validationSchema?: Yup.AnySchema;
 };
@@ -15,21 +15,19 @@ export type FormField = {
 type FormProps = {
     fields: FormField[];
     onSubmit: (formFields: { [key: string]: string | number | File | boolean | null | Date }) => void;
+    isDarkFont?: boolean;
 };
 
 const imageFileValidation = (file: File | null) => {
     if (!file) return true;
-
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     if (!allowedTypes.includes(file.type)) {
         return new Yup.ValidationError("The file must be an image (jpeg, png, gif)", null, "file");
     }
-
     const maxSize = 3 * 1024 * 1024;
     if (file.size > maxSize) {
         return new Yup.ValidationError("The file size must be less than 3MB", null, "file");
     }
-
     return true;
 };
 
@@ -56,6 +54,8 @@ const generateValidationSchema = (fields: FormField[]) => {
                 acc[field.name] = Yup.boolean().nullable();
             } else if (field.type === "date") {
                 acc[field.name] = Yup.date().nullable().required(`${field.label} is required`);
+            } else if (field.type === "password") {
+                acc[field.name] = Yup.string().min(6, `${field.label} must be at least 6 characters`).required(`${field.label} is required`);
             }
         }
         return acc;
@@ -64,9 +64,8 @@ const generateValidationSchema = (fields: FormField[]) => {
     return Yup.object().shape(shape);
 };
 
-const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
+const GenericForm: React.FC<FormProps> = ({ fields, onSubmit, isDarkFont = true }) => {
     const validationSchema = generateValidationSchema(fields);
-
     const formik = useFormik({
         initialValues: fields.reduce((acc, field) => {
             acc[field.name] = field.initialValue;
@@ -87,12 +86,25 @@ const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
         formik.setFieldValue(fieldName, e.target.checked);
     };
 
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
+    const labelClass = isDarkFont ? "text-gray-700" : "text-white";
+    const inputClass = isDarkFont
+        ? "bg-white border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+        : "bg-gray-700 border border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500";
+    const fileInputTextClass = isDarkFont ? "text-gray-900" : "text-white"; // File input text color
+
     return (
         <form onSubmit={formik.handleSubmit} className="w-full max-w-2xl mx-auto overflow-hidden">
             <div className="max-h-[80vh] overflow-y-auto">
                 {fields.map((field) => (
                     <div key={field.name} className="mb-4">
-                        <label htmlFor={field.name} className="block text-sm font-medium text-gray-700">
+                        <label htmlFor={field.name} className={`block text-sm font-medium ${labelClass}`}>
                             {field.label}
                         </label>
                         {field.type === "text" && (
@@ -103,7 +115,38 @@ const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values[field.name] as string}
-                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                                className={`mt-1 p-2 rounded w-full ${inputClass}`}
+                            />
+                        )}
+                        {field.type === "password" && (
+                            <div className="relative">
+                                <input
+                                    type={passwordVisible ? "text" : "password"}
+                                    id={field.name}
+                                    name={field.name}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values[field.name] as string}
+                                    className={`mt-1 p-2 rounded w-full ${inputClass}`}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={togglePasswordVisibility}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                                >
+                                    {passwordVisible ? "Hide" : "Show"}
+                                </button>
+                            </div>
+                        )}
+                        {field.type === "textarea" && (
+                            <textarea
+                                id={field.name}
+                                name={field.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values[field.name] as string}
+                                className={`mt-1 p-2 border rounded w-full h-32 resize-none ${inputClass}`}
+                                rows={5}
                             />
                         )}
                         {field.type === "number" && (
@@ -113,54 +156,17 @@ const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
                                 name={field.name}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                value={formik.values[field.name] as number}
-                                className="mt-1 p-2 border border-gray-300 rounded w-full"
-                            />
-                        )}
-                        {field.type === "textarea" && (
-                            <textarea
-                                id={field.name}
-                                name={field.name}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values[field.name] as string}
-                                className="mt-1 p-2 border border-gray-300 rounded w-full"
-                                rows={5}
-                            />
-                        )}
-                        {field.type === "date" && (
-                            <input
-                                type="date"
-                                id={field.name}
-                                name={field.name}
-                                onChange={(e) => {
-                                    const date = e.target.value ? new Date(e.target.value) : null;
-                                    formik.setFieldValue(field.name, date);
-                                }}
-                                onBlur={formik.handleBlur}
-                                value={
-                                    formik.values[field.name] instanceof Date
-                                        ? (formik.values[field.name] as Date).toISOString().split('T')[0]
-                                        : ""
-                                }
-                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                                value={formik.values[field.name] as number | ""}
+                                className={`mt-1 p-2 rounded w-full ${inputClass}`}
                             />
                         )}
                         {field.type === "select" && field.options && (
                             <Select
-                                id={field.name}
-                                name={field.name}
-                                value={field.options.find(
-                                    (option) => option.value === formik.values[field.name]
-                                )}
-                                onChange={(selectedOption: any) => {
-                                    formik.setFieldValue(field.name, selectedOption.value);
-                                }}
                                 options={field.options}
-                                className="mt-1 p-2 border border-gray-300 rounded w-full"
-                                getOptionLabel={(option) => option.label}
-                                getOptionValue={(option) => option.value.toString()}
-                                maxMenuHeight={200}
+                                onChange={(option) => formik.setFieldValue(field.name, option ? option.value : "")}
+                                onBlur={formik.handleBlur}
+                                className="mt-1"
+                                value={field.options.find((option) => option.value === formik.values[field.name])}
                             />
                         )}
                         {field.type === "file" && (
@@ -169,7 +175,8 @@ const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
                                 id={field.name}
                                 name={field.name}
                                 onChange={(e) => handleFileChange(e, field.name)}
-                                className="mt-1 p-2 border border-gray-300 rounded w-full"
+                                onBlur={formik.handleBlur}
+                                className={`mt-1 ${fileInputTextClass}`} // Dynamic text color for file input
                             />
                         )}
                         {field.type === "checkbox" && (
@@ -178,19 +185,31 @@ const GenericForm: React.FC<FormProps> = ({ fields, onSubmit }) => {
                                 id={field.name}
                                 name={field.name}
                                 onChange={(e) => handleCheckboxChange(e, field.name)}
+                                onBlur={formik.handleBlur}
                                 checked={formik.values[field.name] as boolean}
                                 className="mt-1"
                             />
                         )}
-                        {formik.touched[field.name] && formik.errors[field.name] ? (
-                            <div className="text-red-500 text-sm mt-1">{formik.errors[field.name]}</div>
-                        ) : null}
+                        {field.type === "date" && (
+                            <input
+                                type="date"
+                                id={field.name}
+                                name={field.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values[field.name] as string}
+                                className={`mt-1 p-2 rounded w-full ${inputClass}`}
+                            />
+                        )}
+                        {formik.touched[field.name] && formik.errors[field.name] && (
+                            <p className="text-red-500 text-sm mt-1">{formik.errors[field.name]}</p>
+                        )}
                     </div>
                 ))}
             </div>
             <button
                 type="submit"
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+                className={`mt-4 px-4 py-2 ${isDarkFont ? "bg-blue-600 text-white" : "bg-green-600 text-white"} rounded`}
             >
                 Submit
             </button>

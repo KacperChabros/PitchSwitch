@@ -57,8 +57,14 @@ export const UserProvider = ({ children }: Props) => {
             setRefreshToken(refreshToken);
             axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
             const decodedToken = jwtDecode<BackendToken>(accessToken.replace('Bearer',''));
-            setIsAdmin(decodedToken.role === "Admin" ? true : false);
-            setIsJournalist(decodedToken.role === "Journalist" ? true : false);
+            
+            if(Array.isArray(decodedToken.role)){
+                setIsAdmin(decodedToken.role.includes("Admin"));
+                setIsJournalist(decodedToken.role.includes("Journalist"));
+            }else{
+                setIsAdmin(decodedToken.role === "Admin" ? true : false);
+                setIsJournalist(decodedToken.role === "Journalist" ? true : false);
+            }
         }
         setIsReady(true);
     }, [accessToken]);
