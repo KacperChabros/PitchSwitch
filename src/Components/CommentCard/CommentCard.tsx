@@ -1,5 +1,6 @@
 import React from 'react';
 import { MinimalCommentDto } from '../../Dtos/Comment';
+import { Link } from 'react-router-dom';
 
 type CommentCardProps = {
   comment: MinimalCommentDto;
@@ -12,15 +13,18 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, updateButton, delete
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <img 
-            src={comment.createdByUser.profilePictureUrl ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${comment.createdByUser.profilePictureUrl}` 
-            : "/images/default_user_picture.png"} 
-            alt={comment.createdByUser.userName} 
-            className="w-10 h-10 rounded-full mr-4"
-          />
-          <span className="font-bold">{comment.createdByUser.userName}</span>
-        </div>
+        <Link to={`user/${comment.createdByUser.userName}`} className="hover:bg-blue-300">
+          <div className="flex items-center">
+            <img 
+              src={comment.createdByUser.profilePictureUrl ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${comment.createdByUser.profilePictureUrl}` 
+              : "/images/default_user_picture.png"} 
+              alt={comment.createdByUser.userName} 
+              className="w-10 h-10 rounded-full mr-4"
+            />
+            <span className="font-bold">{comment.createdByUser.userName}</span>
+          </div>
+        </Link>
+        
         {canUpdateAndDelete && (
           <div className="flex space-x-2">
             {updateButton && <div>{updateButton}</div>}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPen, FaTrash, FaArchive, FaUndo, FaPlus } from 'react-icons/fa';
+import { FaPen, FaTrash, FaArchive, FaUndo, FaPlus, FaCheckCircle  } from 'react-icons/fa';
 
 type DeleteButtonProps = {
   onClick: () => void;
@@ -76,4 +76,19 @@ const AddButton: React.FC<AddButtonProps> = ({ onClick, label = "Add" }) => (
   </button>
 );
 
-export { RestoreButton, UpdateButton, ArchiveButton, AddButton, DeleteButton };
+type ReviewButtonProps = {
+  onClick: () => void;
+  label?: string;
+};
+
+const ReviewButton: React.FC<ReviewButtonProps> = ({ onClick, label = "Review" }) => (
+  <button
+    onClick={onClick}
+    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none flex items-center space-x-2"
+  >
+    <FaCheckCircle />
+    <span>{label}</span>
+  </button>
+);
+
+export { RestoreButton, UpdateButton, ArchiveButton, AddButton, DeleteButton, ReviewButton };

@@ -24,6 +24,8 @@ class ErrorHandler {
             if (error.response?.status === 401) {
                 this.logoutUser();
                 toast.error("You've been logged out");
+            } else if(error.response?.status === 403){
+                toast.error("You are not allowed to perform this action");
             } else if (error.response?.status === 404) {
                 toast.warning(`Error: ${error.response?.data}`);
             } else {
