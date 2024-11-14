@@ -1,4 +1,5 @@
 import { MinimalClubDto } from "./ClubDto";
+import { JournalistStatusApplicationDto } from "./JournalistStatusApplicationDto";
 import { ListElementPostDto, MinimalPostDto } from "./PostDto";
 
 export type NewUserDto = {
@@ -25,6 +26,7 @@ export type GetUserDto = {
     favouriteClub?: MinimalClubDto;
     registrationDate: Date;
     posts: ListElementPostDto[];
+    applications: JournalistStatusApplicationDto[];
 }
 
 export type RegisterUserDto = {

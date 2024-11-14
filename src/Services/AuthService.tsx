@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RegisterUserDto, NewUserDto, GetUserDto, UpdateUserDto } from '../Dtos/UserDto';
+import { RegisterUserDto, NewUserDto, GetUserDto, UpdateUserDto, MinimalUserDto } from '../Dtos/UserDto';
 
 const accountApiUrl = `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_API_URL}account`;
 
@@ -43,5 +43,10 @@ export const updateUserAPI = async (updateUserDto: UpdateUserDto) => {
 
 export const deleteUserAPI = async () => {
     const response = await axios.delete(`${accountApiUrl}/deleteuser`);
+    return response;
+}
+
+export const getAllMinUsersAPI = async () => {
+    const response = await axios.get<MinimalUserDto[]>(`${accountApiUrl}/getallminusers`);
     return response;
 }
