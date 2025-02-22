@@ -234,15 +234,27 @@ const TransferPage = (props: Props) => {
                         subTitle={transferRumour.createdByUser ? transferRumour.createdByUser.userName : 'Unknown'} 
                         imageUrl={transferRumour.createdByUser && transferRumour.createdByUser.profilePictureUrl ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${transferRumour.createdByUser.profilePictureUrl}` 
                         : "/images/default_user_picture.png" }
+                        href={transferRumour.createdByUser ? `/user/${transferRumour.createdByUser.userName}` : undefined}
                     />
                 </div>
             </div>
         </div>
         <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
                 {modalContentType === 'update' ? (
-                    <GenericForm fields={transferRumourFields} onSubmit={handleUpdateSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Update Transfer Rumour
+                        </h1>
+                        <GenericForm fields={transferRumourFields} onSubmit={handleUpdateSubmit} />
+                    </>           
                 ) : modalContentType === 'archive' ? (
-                    <GenericForm fields={archiveRumourFields} onSubmit={handleArchiveSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Archive Transfer Rumour
+                        </h1>
+                        <GenericForm fields={archiveRumourFields} onSubmit={handleArchiveSubmit} />
+                    </>
+                    
                 ) : null}
         </Modal>
     </>

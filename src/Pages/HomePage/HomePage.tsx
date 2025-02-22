@@ -215,7 +215,7 @@ const HomePage: React.FC = () => {
                   const transfersData = await getAllMinimalTransfersAPI();
                   setMinTransfers(transfersData.data.map((transfer) => ({
                       transferId: transfer.transferId.toString(),
-                      name: `${transfer.player.firstName.slice(0,1)}. ${transfer.player.lastName}, ${transfer.buyingClub ? transfer.buyingClub.shortName : "FA"} -> ${transfer.sellingClub ? transfer.sellingClub.shortName : "FA"}`,
+                      name: `${transfer.player.firstName.slice(0,1)}. ${transfer.player.lastName}, ${transfer.sellingClub ? transfer.sellingClub.shortName : "FA"} -> ${transfer.buyingClub ? transfer.buyingClub.shortName : "FA"}`,
                   })));
               } catch (e: any) {
                   errorHandler.handle(e);
@@ -227,7 +227,7 @@ const HomePage: React.FC = () => {
               const transferRumoursData = await getAllMinimalTransferRumoursAPI();
               setMinTransferRumours(transferRumoursData.data.map((transferRumour) => ({
                   transferRumourId: transferRumour.transferRumourId.toString(),
-                  name: `${transferRumour.player.firstName.slice(0,1)}. ${transferRumour.player.lastName}, ${transferRumour.buyingClub ? transferRumour.buyingClub.shortName : "FA"} -> ${transferRumour.sellingClub ? transferRumour.sellingClub.shortName : "FA"}`,
+                  name: `${transferRumour.player.firstName.slice(0,1)}. ${transferRumour.player.lastName}, ${transferRumour.sellingClub ? transferRumour.sellingClub.shortName : "FA"} -> ${transferRumour.buyingClub ? transferRumour.buyingClub.shortName : "FA"}`,
               })));
             } catch (e: any) {
                 errorHandler.handle(e);
@@ -242,9 +242,6 @@ const HomePage: React.FC = () => {
     setIsModalOpen(true);
 };
 
-  const handleDelete = (postId: number) => {
-      console.log('Deleting post with id', postId);
-  };
 
   const handleSearch = async (values: any) => {
       const searchDto: PostQueryObject = {
@@ -330,6 +327,9 @@ const HomePage: React.FC = () => {
             </div>
             )}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                Add Post
+            </h1>
             <GenericForm fields={addPostFields} onSubmit={handleAddSubmit} />
         </Modal>
       </>

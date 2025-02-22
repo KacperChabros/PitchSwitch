@@ -455,11 +455,26 @@ const PostPage = (props: Props) => {
     
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 {modalContentType === 'update' ? (
-                    <GenericForm fields={postFields} onSubmit={handleUpdateSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Update Post
+                        </h1>
+                        <GenericForm fields={postFields} onSubmit={handleUpdateSubmit} />
+                    </>           
                 ) : modalContentType === 'addComment' ? (
-                    <GenericForm fields={addCommentFields} onSubmit={handleAddCommentSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Add Comment
+                        </h1>
+                        <GenericForm fields={addCommentFields} onSubmit={handleAddCommentSubmit} />
+                    </>
                 ) : modalContentType === "updateComment" ? (
-                    <GenericForm fields={createUpdateCommentFields(selectedComment?.content)} onSubmit={handleUpdateCommentSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Update Comment
+                        </h1>
+                        <GenericForm fields={createUpdateCommentFields(selectedComment?.content)} onSubmit={handleUpdateCommentSubmit} />
+                    </>     
                 ) : null}
             </Modal>
         </div>

@@ -208,6 +208,9 @@ const PlayerPage = (props: Props) => {
         </div>
 
         <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                    Update Player
+                </h1>
                 <GenericForm fields={playerFields} onSubmit={handleUpdateSubmit} />
         </Modal>
       </>

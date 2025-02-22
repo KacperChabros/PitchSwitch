@@ -652,13 +652,36 @@ const UserPage = (props: Props) => {
 
         <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
                  {modalContentType === 'updateProfile' ? (
-                    <GenericForm fields={userFields} onSubmit={handleUpdateSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Update Profile
+                        </h1>
+                        <GenericForm fields={userFields} onSubmit={handleUpdateSubmit} />
+                    </>         
                 ) : modalContentType === 'addApplication' ? (
-                    <GenericForm fields={journalistApplicationFields} onSubmit={handleAddApplicationSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Add Application
+                        </h1>
+                        <GenericForm fields={journalistApplicationFields} onSubmit={handleAddApplicationSubmit} />
+                    </>
+                    
                 ) : modalContentType === 'updateApplication' ? (
-                    <GenericForm fields={updateApplicationFields} onSubmit={handleUpdateApplicationSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Update Application
+                        </h1>
+                        <GenericForm fields={updateApplicationFields} onSubmit={handleUpdateApplicationSubmit} />
+                    </>
+                    
                 ) : modalContentType === 'reviewApplication' ? (
-                    <GenericForm fields={reviewFields} onSubmit={handleReviewApplicationSubmit} />
+                    <>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                            Review Application
+                        </h1>
+                        <GenericForm fields={reviewFields} onSubmit={handleReviewApplicationSubmit} />
+                    </>
+                    
                 )  
                 : null}
                 

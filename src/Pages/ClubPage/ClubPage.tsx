@@ -167,7 +167,10 @@ const ClubPage = (props: Props) => {
           </div>
         </div>
 
-        <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
+        <Modal isOpen={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>   
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                    Update club
+                </h1>
                 <GenericForm fields={clubFields} onSubmit={handleUpdateSubmit} />
         </Modal>
       </>
