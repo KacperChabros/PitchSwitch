@@ -46,7 +46,7 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({
 
       <div className="flex items-center space-x-2">
         <img
-          src={application.submittedByUser.profilePictureUrl || '/images/default_user_picture.png'}
+          src={application.submittedByUser.profilePictureUrl ? `${process.env.REACT_APP_PITCH_SWITCH_BACKEND_URL}${application.submittedByUser.profilePictureUrl}` : '/images/default_user_picture.png'}
           alt={application.submittedByUser.userName}
           className="w-10 h-10 object-cover rounded-full"
         />

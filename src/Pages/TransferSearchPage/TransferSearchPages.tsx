@@ -420,6 +420,9 @@ const TransferSearchPages = (props: Props) => {
             )}
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                    Add Transfer
+                </h1>
                 <GenericForm fields={addTransferFields} onSubmit={handleAddSubmit} />
             </Modal>
     </div>

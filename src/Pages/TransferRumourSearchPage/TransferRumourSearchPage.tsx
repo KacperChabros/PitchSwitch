@@ -295,15 +295,6 @@ const createAddTransferRumourFieldsConfig = (
                 .min(0, "Confidence level can't be less than 0%")
                 .max(100, "Confidence level can't be more than 100%")
         },
-        {
-            name: "transferDate",
-            label: "Transfer Date",
-            initialValue: new Date(),
-            type: "date",
-            validationSchema: Yup.date()
-                .required("Transfer date is required")
-                .max(new Date(), "Transfer date must be in the past")
-        },
     ];
     return addTransferRumourFields;
 };
@@ -439,6 +430,7 @@ const TransferSearchPages = (props: Props) => {
             )}
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
+                
                 <GenericForm fields={addTransferRumourFields} onSubmit={handleAddSubmit} />
             </Modal>
     </div>
